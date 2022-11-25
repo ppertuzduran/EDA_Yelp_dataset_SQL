@@ -1,0 +1,464 @@
+Data Scientist Role Play: Profiling and Analyzing the Yelp Dataset Coursera Worksheet
+
+This is a 2-part assignment. In the first part, you are asked a series of questions that will help you profile and understand the data just like a data scientist would. For this first part of the assignment, you will be assessed both on the correctness of your findings, as well as the code you used to arrive at your answer. You will be graded on how easy your code is to read, so remember to use proper formatting and comments where necessary.
+
+In the second part of the assignment, you are asked to come up with your own inferences and analysis of the data for a particular research question you want to answer. You will be required to prepare the dataset for the analysis you choose to do. As with the first part, you will be graded, in part, on how easy your code is to read, so use proper formatting and comments to illustrate and communicate your intent as required.
+
+For both parts of this assignment, use this "worksheet." It provides all the questions you are being asked, and your job will be to transfer your answers and SQL coding where indicated into this worksheet so that your peers can review your work. You should be able to use any Text Editor (Windows Notepad, Apple TextEdit, Notepad ++, Sublime Text, etc.) to copy and paste your answers. If you are going to use Word or some other page layout application, just be careful to make sure your answers and code are lined appropriately.
+In this case, you may want to save as a PDF to ensure your formatting remains intact for you reviewer.
+
+
+
+Part 1: Yelp Dataset Profiling and Understanding
+
+1. Profile the data by finding the total number of records for each of the tables below:
+	
+i. Attribute table = 10000
+ii. Business table = 10000
+iii. Category table = 10000
+iv. Checkin table = 10000
+v. elite_years table = 10000
+vi. friend table = 10000
+vii. hours table = 10000
+viii. photo table = 10000
+ix. review table = 10000
+x. tip table = 10000
+xi. user table = 10000
+	
+
+
+2. Find the total distinct records by either the foreign key or primary key for each table. If two foreign keys are listed in the table, please specify which foreign key.
+
+i. Business = id (10000 records)
+ii. Hours = business_id (1562 records)
+iii. Category = business_id (2643 records)
+iv. Attribute = business_id (1115 records)
+v. Review = id (1000 records), business_id (8090 records), user_id (9581 records)
+vi. Checkin = business_id (493 records)
+vii. Photo = id (10000 records), business_id (6493 records)
+viii. Tip = user_id (537 records), business_id (3979 records)
+ix. User = id (10000 records)
+x. Friend = user_id (11 records)
+xi. Elite_years = user_id (2780 records)
+
+Note: Primary Keys are denoted in the ER-Diagram with a yellow key icon.	
+
+
+
+3. Are there any columns with null values in the Users table? Indicate "yes," or "no."
+
+	Answer: no.
+	
+	
+	SQL code used to arrive at answer:
+	
+		SELECT *
+		FROM user
+		WHERE [column_name] IS NULL;
+	
+	-- I did this with every column name in the user table.
+
+	
+4. For each table and column listed below, display the smallest (minimum), largest (maximum), and average (mean) value for the following fields:
+
+	i. Table: Review, Column: Stars
+	
+		min: 1	 	max: 5		avg: 3.7082
+		
+	
+	ii. Table: Business, Column: Stars
+	
+		min: 1.0	max: 5.0	avg: 3.6549
+		
+	
+	iii. Table: Tip, Column: Likes
+	
+		min: 0		max: 2		avg: 0.0144
+		
+	
+	iv. Table: Checkin, Column: Count
+	
+		min: 1		max: 53		avg: 1.9414 
+		
+	
+	v. Table: User, Column: Review_count
+	
+		min: 0		max: 2000	avg: 24.2995
+		
+
+
+5. List the cities with the most reviews in descending order:
+
+	SQL code used to arrive at answer:
+	
+		SELECT city, SUM(review_count) as N_reviews
+		FROM business 
+		GROUP BY city
+		ORDER BY N_reviews DESC
+	
+	
+	Copy and Paste the Result Below:
+	
+	+-----------------+-----------+
+	| city            | N_reviews |
+	+-----------------+-----------+
+	| Las Vegas       |     82854 |
+	| Phoenix         |     34503 |
+	| Toronto         |     24113 |
+	| Scottsdale      |     20614 |
+	| Charlotte       |     12523 |
+	| Henderson       |     10871 |
+	| Tempe           |     10504 |
+	| Pittsburgh      |      9798 |
+	| Montréal        |      9448 |
+	| Chandler        |      8112 |
+	| Mesa            |      6875 |
+	| Gilbert         |      6380 |
+	| Cleveland       |      5593 |
+	| Madison         |      5265 |
+	| Glendale        |      4406 |
+	| Mississauga     |      3814 |
+	| Edinburgh       |      2792 |
+	| Peoria          |      2624 |
+	| North Las Vegas |      2438 |
+	| Markham         |      2352 |
+	| Champaign       |      2029 |
+	| Stuttgart       |      1849 |
+	| Surprise        |      1520 |
+	| Lakewood        |      1465 |
+	| Goodyear        |      1155 |
+	+-----------------+-----------+
+	(Output limit exceeded, 25 of 362 total rows shown)
+	
+	
+6. Find the distribution of star ratings to the business in the following cities:
+
+i. Avon
+
+SQL code used to arrive at answer:
+
+	SELECT stars as star_rating, count(stars) as count
+	FROM business
+	WHERE city = 'Avon'
+	GROUP BY stars;
+
+
+Copy and Paste the Resulting Table Below (2 columns – star rating and count):
+
+	+-------------+-------+
+	| star_rating | count |
+	+-------------+-------+
+	|         1.5 |     1 |
+	|         2.5 |     2 |
+	|         3.5 |     3 |
+	|         4.0 |     2 |
+	|         4.5 |     1 |
+	|         5.0 |     1 |
+	+-------------+-------+
+
+
+ii. Beachwood
+
+SQL code used to arrive at answer:
+
+	SELECT stars as star_rating, count(stars) as count
+	FROM business
+	WHERE city = 'Beachwood'
+	GROUP BY stars;
+
+
+Copy and Paste the Resulting Table Below (2 columns – star rating and count):
+
+	+-------------+-------+
+	| star_rating | count |
+	+-------------+-------+
+	|         2.0 |     1 |
+	|         2.5 |     1 |
+	|         3.0 |     2 |
+	|         3.5 |     2 |
+	|         4.0 |     1 |
+	|         4.5 |     2 |
+	|         5.0 |     5 |
+	+-------------+-------+
+
+
+7. Find the top 3 users based on their total number of reviews:
+		
+	SQL code used to arrive at answer:
+	
+		SELECT id, name, review_count
+		FROM user
+		ORDER BY review_count DESC
+		LIMIT 3;
+		
+	Copy and Paste the Result Below:
+		+------------------------+--------+--------------+
+		| id                     | name   | review_count |
+		+------------------------+--------+--------------+
+		| -G7Zkl1wIWBBmD0KRy_sCw | Gerald |         2000 |
+		| -3s52C4zL_DHRK0ULG6qtg | Sara   |         1629 |
+		| -8lbUNlXVSoXqaRRiHiSNg | Yuri   |         1339 |
+		+------------------------+--------+--------------+
+		
+
+8. Does posing more reviews correlate with more fans?
+
+
+
+	Please explain your findings and interpretation of the results:
+	
+	To verify the correlation between the number of reviews performed by a user and the number of fans he/she has, the correlation coefficient between these two variables was calculated.
+	
+	If the variables are linearly correlated, the coefficient will have a value close to 1. If they are inversely proportional, the coefficient will have a value close to -1, and if they are not linearly correlated, the coefficient will have a value close to 0.
+	
+	First, a script was used to get the components needed to calculate the correlation factor.
+	
+	SELECT 
+    SUM(review_count),
+    SUM(fans),
+    SUM(XY),
+    SUM(X2),
+    SUM(Y2)
+
+	FROM (SELECT 
+		review_count, fans, 
+		review_count*fans AS XY, 
+		review_count*review_count AS X2, 
+		fans*fans AS Y2
+
+	FROM user
+	ORDER BY review_count DESC) AS formula_elements
+	
+	OUTPUT:
+	
+	+-------------------+-----------+---------+----------+---------+
+	| SUM(review_count) | SUM(fans) | SUM(XY) |  SUM(X2) | SUM(Y2) |
+	+-------------------+-----------+---------+----------+---------+
+	|            242995 |     14896 | 5626520 | 62107995 | 1150280 |
+	+-------------------+-----------+---------+----------+---------+
+	
+	n = 10000
+	
+	Correlation coefficient (r) FORMULA:
+	
+	r = (nSUM(XY) - SUM(review_count)*SUM(fans))/
+		SQRT([nSUM(X2) - SUM(review_count)^2][nSUM(Y2) - SUM(fans)^2])
+	
+	r = (10000*5626520 - 242995*14896)/
+		SQRT([10000*62107995 - 242995^2][10000*1150280 - 14896^2])
+		
+	r = 0.6612
+	
+	Thanks to the correlation coefficient for these two variables, we can assume that although there is no direct proportional relationship between them, there is a certain proportional relationship between the number of reviews performed and the number of fans for each user.
+	
+9. Are there more reviews with the word "love" or with the word "hate" in them?
+
+	Answer: There are more reviews with the word "love" (1780) than with the word "hate" (232).
+
+	
+	SQL code used to arrive at answer:
+	
+	SELECT count(text) AS Total_love_reviews
+	FROM review 
+	WHERE text LIKE '%love%'
+	
+	--output:
+
+	+--------------------+
+	| Total_love_reviews |
+	+--------------------+
+	|               1780 |
+	+--------------------+
+	
+	
+	SELECT count(text) AS Total_hate_reviews
+	FROM review 
+	WHERE text LIKE '%hate%'
+	
+	--output:
+	
+	+--------------------+
+	| Total_hate_reviews |
+	+--------------------+
+	|                232 |
+	+--------------------+
+	
+	
+10. Find the top 10 users with the most fans:
+
+	SQL code used to arrive at answer:
+	
+		SELECT id, name, fans
+		FROM user
+		ORDER BY fans DESC
+		LIMIT 10;
+	
+	
+	Copy and Paste the Result Below:
+	
+	+------------------------+-----------+------+
+	| id                     | name      | fans |
+	+------------------------+-----------+------+
+	| -9I98YbNQnLdAmcYfb324Q | Amy       |  503 |
+	| -8EnCioUmDygAbsYZmTeRQ | Mimi      |  497 |
+	| --2vR0DIsmQ6WfcSzKWigw | Harald    |  311 |
+	| -G7Zkl1wIWBBmD0KRy_sCw | Gerald    |  253 |
+	| -0IiMAZI2SsQ7VmyzJjokQ | Christine |  173 |
+	| -g3XIcCb2b-BD0QBCcq2Sw | Lisa      |  159 |
+	| -9bbDysuiWeo2VShFJJtcw | Cat       |  133 |
+	| -FZBTkAZEXoP7CYvRV2ZwQ | William   |  126 |
+	| -9da1xk7zgnnfO1uTVYGkA | Fran      |  124 |
+	| -lh59ko3dxChBSZ9U7LfUw | Lissa     |  120 |
+	+------------------------+-----------+------+
+
+
+Part 2: Inferences and Analysis
+
+1. Pick one city and category of your choice and group the businesses in that city or category by their overall star rating. Compare the businesses with 2-3 stars to the businesses with 4-5 stars and answer the following questions. Include your code.
+
+City: Toronto
+Category: Restaurants
+	
+i. Do the two groups you chose to analyze have a different distribution of hours?
+
+In general, both groups have a similar time distribution, starting in most cases between 10:30 and 11:00 (common time) and ending between 21:00 and 23:00 (some end the day in the early morning). However, some 4-5 star businesses start the day after the common time, while 2-3 star businesses start before the common time.
+
+	
+ii. Do the two groups you chose to analyze have a different number of reviews?
+
+2-3 business have an average of 28.66 reviews in total, while 4-5 business have an average of 41. But the number of reviews is not directly proportional to the number of stars, for instance, business with 4.5 stars have less reviews than business with 4 stars.
+         
+         
+iii. Are you able to infer anything from the location data provided between these two groups? Explain.
+
+Using Google Maps, distances between business were calculated. 3-4 business are more separated each other than 2-3 business. The longest distance between 4-5 business is 11.5km, the shortest is 5km and the average is 7.7km, while the longest distance between 2-3 business is 2.4km, the shortest is 1km and the average is 1.6km.
+
+3-4 business each other distances:
+
+min: 5km	max: 11.5km		avg: 7.7km
+
+2-3 business each other distances:
+
+min: 1km	max: 2.4km		avg: 1.6km
+
+
+SQL code used for analysis:
+
+	SELECT b.id, b.name, b.stars, h.hours, b.review_count, b.latitude, b.longitude --columns
+	
+	FROM (
+		(category c
+	INNER JOIN hours h ON
+	c.business_id = h.business_id) -- Join between business category and their working day
+
+	INNER JOIN business b ON
+	h.business_id = b.id) -- Join between business and their (category & working day)
+
+	WHERE b.city = 'Toronto' AND c.category = 'Restaurants'
+	
+	ORDER BY b.stars ASC;	
+		
+		
+2. Group business based on the ones that are open and the ones that are closed. What differences can you find between the ones that are still open and the ones that are closed? List at least two differences and the SQL code you used to arrive at your answer.
+
+Compare is_open with other columns to check differences.
+		
+i. Difference 1: Business that are closed (is_open = 0) have less number of reviews than the business that are still open (is_open = 1). 
+
+	+---------+-------------------+
+	| is_open | SUM(review_count) |
+	+---------+-------------------+
+	|       0 |             35261 |
+	|       1 |            269300 |
+	+---------+-------------------+
+			 
+         
+ii. Difference 2: Business that are closed (is_open = 0) have a lower average star rating than the business that are still open (is_open = 1). 
+
+	+---------+---------------+
+	| is_open |    AVG(stars) |
+	+---------+---------------+
+	|       0 | 3.52039473684 |
+	|       1 | 3.67900943396 |
+	+---------+---------------+
+         
+         
+SQL code used for analysis:
+
+	SELECT is_open, SUM(review_count), AVG(stars)
+	FROM business
+	GROUP BY is_open
+
+	
+3. For this last part of your analysis, you are going to choose the type of analysis you want to conduct on the Yelp dataset and are going to prepare the data for analysis.
+
+Ideas for analysis include: Parsing out keywords and business attributes for sentiment analysis, clustering businesses to find commonalities or anomalies between them, predicting the overall star rating for a business, predicting the number of fans a user will have, and so on. These are just a few examples to get you started, so feel free to be creative and come up with your own problem you want to solve. Provide answers, in-line, to all of the following:
+	
+i. Indicate the type of analysis you chose to do:
+
+Sentiment analysis. The objective of this analysis is to find patterns in the grammatical structure and keywords in human reviews that allow us to recognize when a feedback is associated with a positive or negative sentiment.
+
+For this type of analysis a natural language processing algorithm must be used that is able to parse the text entries of a dataset and relate them to a label that will indicate whether the comment corresponds to a positive sentiment or a negative sentiment.
+         
+         
+ii. Write 1-2 brief paragraphs on the type of data you will need for your analysis and why you chose that data:
+
+For this analysis will be needed a dataset based on text entries containing the word "love" or the word "hate", followed by a label specifying whether they are attributed to a positive sentiment or a negative sentiment (positive = 0, negative = 1).
+
+Reviews containing the word "love" will correspond to entries related to a positive sentiment, and reviews containing the word "hate" will correspond to entries related to a negative sentiment.
+                           
+                  
+iii. Output of your finished dataset:
+
+For view purposes, the string lenght was truncated to MAX 110.
+It should be noted that the more balanced the number of positive and negative reviews, the better the results will be.
+
++---------------------------------------------------------------------------------------------------------------+-------+
+| text                                                                                                          | label |
++---------------------------------------------------------------------------------------------------------------+-------+
+| Amazing food :) Loved it so much will be back soon for sure. Very friendly staff and polite.                  |     0 |
+| Awesome breakfast spot, love the food! This place has extremely fast and friendly service                     |     0 |
+| Bachi is always a hit! Love their oxtail fries and burgers. Can't really go wrong with any choice!            |     0 |
+| Been there twice fast service, great food, loved the duck and Thai tea...                                     |     0 |
+| Defiantly a lifters gym.  I love this place.  24 hours a day with great equipment and staff.                  |     0 |
+| Definitely try the curry udon! I literally should be a vip here since I eat it so often I LOVE THIS PLACE!    |     0 |
+| Excellent Indian food. Both northern and southern specialties are offered, I loved the South Indian Thali     |     0 |
+| Excellent food. Fresh sushi and great service. Highly recommended. Love the angry dragon roll.                |     0 |
+| Fast service good food for the price. I love the grilled chicken sandwich , I will be back.                   |     0 |
+| Food was delish! Loved the salad with the crispy pita chips and the garlic sauce is amazing !                 |     0 |
+| Good food, entertainment, lots of beer... loved the brussel sprout salad.  Other food choices were good too.  |     0 |
+| Good service Akisha did an amazing job I love how my hair is I will definitely be coming back!                |     0 |
+| Great Gyoza!  Best in the valley...the lady in the front is very sweet..Love this place.                      |     0 |
+| Great pizza, love the ingredients and the waiters are always helpful and fun to chat with.                    |     0 |
+| I love the cheesecake so much! Every time after shopping in the mall I'll come to have a piece of cake        |     0 |
+| I love the food at Chompies! I grew up on the east coast and this food reminds me of home. LOVE IT!           |     0 |
+| I love this place! Great ramen and my favorite chicken Katsu at a great price. Awesome service as well!!      |     0 |
+| I love this place. Te atmosphere is alway great and the food is amazing.  Staff is very friedly and helpful   |     0 |
+| I love twisted meltz sooo much. The food is delicious and reasonably priced and the employees are so nice!    |     0 |
+| I loved the Nutella.  The girl who helped us was super friendly and professional.  Her name is Danielle.      |     0 |
+| I went in today to chop off 16 inches into a lob. I love it. She took her time and did exactly what I wanted! |     0 |
+| Just walked out on a $20 order,disgusting pigs. Use it to buy some gloves, and a food handlers course.        |     0 |
+| Love my local bar!                                                                                            |     0 |
+| Love the Extreme Ultimate Vanilla Ice Blended drink. If you haven't gotten it, get it!                        |     0 |
+| Love this place! Great atmosphere, even better food! Love the fish tacos and you have to order the guac!      |     0 |
++---------------------------------------------------------------------------------------------------------------+-------+
+(Output limit exceeded, 25 of 43 total rows shown)
+         
+         
+iv. Provide the SQL code you used to create your final dataset:
+
+	--For view purposes, the string lenght was truncated to MAX 110.
+
+	SELECT text, 0 AS label
+	FROM review 
+	WHERE text LIKE '%love%' AND text NOT LIKE '%hate%' AND length(text)< 110
+
+	UNION 
+
+	SELECT text, 1 AS label
+	FROM review 
+	WHERE text LIKE '%hate%' AND text NOT LIKE '%love%' AND length(text)< 110
+	
+	-- It should be noted that the more balanced the number of positive and negative reviews, the better the results will be.
+
+
